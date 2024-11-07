@@ -1,6 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import Header from "./_components/ui/layout/header";
 import { Button } from "./_components/ui/button";
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
   }
   return (
     <div className="items-center">
-      <Header />
       <div className="mt-3 items-center px-3 py-3">
         <span className="text-3xl font-bold">Dashboard</span>
         <Button variant={"ghost"}>Relatório IA</Button>

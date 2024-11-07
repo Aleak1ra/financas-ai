@@ -3,6 +3,7 @@ import { Mulish } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark, neobrutalism } from "@clerk/themes";
+import Header from "./_components/ui/layout/header";
 
 const mulish = Mulish({
   subsets: ["latin-ext"],
@@ -28,6 +29,7 @@ export default function RootLayout({
             baseTheme: [dark, neobrutalism],
           }}
         >
+          <Header />
           {children}
         </ClerkProvider>
       </body>
