@@ -24,15 +24,15 @@ const TransactionTypeBadge = ({ transaction }: BadgeTransactionProps) => {
       );
     case TransactionType.INVESTMENT:
       return (
-        <Badge className="bg-muted text-primary hover:bg-muted">
-          <CircleIcon className="mr-2 fill-primary" size={10} />
+        <Badge className="bg-muted text-secondary hover:bg-muted">
+          <CircleIcon className="mr-2 fill-white" size={10} />
           Investimento
         </Badge>
       );
     default:
       return (
-        <Badge className="bg-muted text-primary hover:bg-muted">
-          <CircleIcon className="mr-2 fill-primary" size={10} />
+        <Badge className="text-yellow bg-muted hover:bg-muted">
+          <CircleIcon className="fill-yellow mr-2" size={10} />
           Outro
         </Badge>
       );

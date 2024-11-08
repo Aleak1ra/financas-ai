@@ -1,8 +1,14 @@
 "use client";
 
+import * as React from "react";
+
 import {
   ColumnDef,
+  SortingState,
+  getSortedRowModel,
   flexRender,
+  ColumnFiltersState,
+  getFilteredRowModel,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -15,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "./table";
+import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -25,14 +32,36 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   const table = useReactTable({
     data,
     columns,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <div className="rounded-md border">
+      <div className="flex items-center p-4">
+        <Input
+          placeholder="Pesquisa por nome..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
