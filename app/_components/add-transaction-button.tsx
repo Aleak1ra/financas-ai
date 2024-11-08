@@ -155,7 +155,7 @@ const AddTransactionButton = () => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione um tipo..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -183,7 +183,7 @@ const AddTransactionButton = () => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione uma categoria..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -211,7 +211,7 @@ const AddTransactionButton = () => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione um método..." />
                       </SelectTrigger>
                       <SelectContent>
