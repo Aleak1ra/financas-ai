@@ -1,6 +1,5 @@
 "use client";
-
-import { Transaction } from "@prisma/client";
+import { TransactionDTO } from "./dto/transactionDTO.ts";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import {
@@ -8,9 +7,10 @@ import {
   TRANSACTION_PAYMENT_METHOD_LABELS,
 } from "@/app/_constants/transactions";
 import { Button } from "@/app/_components/ui/button";
-import { ArrowUpDown, EditIcon, TrashIcon } from "lucide-react";
+import { ArrowUpDown, TrashIcon } from "lucide-react";
+import EditButton from "../_components/editButton";
 
-export const transactionColumns: ColumnDef<Transaction>[] = [
+export const transactionColumns: ColumnDef<TransactionDTO>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -56,7 +56,13 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row: { original: transaction } }) => (
-      <span>{TRANSACTION_CATEGORY_LABELS[transaction.category]}</span>
+      <span>
+        {
+          TRANSACTION_CATEGORY_LABELS[
+            transaction.category as keyof typeof TRANSACTION_CATEGORY_LABELS
+          ]
+        }
+      </span>
     ),
   },
   {
@@ -74,7 +80,11 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     },
     cell: ({ row: { original: transaction } }) => (
       <span>
-        {TRANSACTION_PAYMENT_METHOD_LABELS[transaction.paymentMethod]}
+        {
+          TRANSACTION_PAYMENT_METHOD_LABELS[
+            transaction.paymentMethod as keyof typeof TRANSACTION_PAYMENT_METHOD_LABELS
+          ]
+        }
       </span>
     ),
   },
@@ -131,9 +141,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
         <Button variant={"ghost"} className="">
           <TrashIcon className="" size={16} />
         </Button>
-        <Button variant={"ghost"} className="">
-          <EditIcon className="" size={16} />
-        </Button>
+        <EditButton />
       </div>
     ),
   },
