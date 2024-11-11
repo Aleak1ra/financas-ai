@@ -1,5 +1,5 @@
 "use client";
-import { TransactionDTO } from "./dto/transactionDTO.ts";
+import { TransactionDTO } from "./dto/transactionDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import {
@@ -136,12 +136,12 @@ export const transactionColumns: ColumnDef<TransactionDTO>[] = [
   {
     accessorKey: "actions",
     header: "",
-    cell: () => (
+    cell: ({ row: { original: transaction } }) => (
       <div className="flex justify-end">
+        <EditButton transaction={transaction} />
         <Button variant={"ghost"} className="">
           <TrashIcon className="" size={16} />
         </Button>
-        <EditButton />
       </div>
     ),
   },

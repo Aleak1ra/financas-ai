@@ -8,6 +8,7 @@ import { TransactionCategory, TransactionPaymentMethod, TransactionType } from "
 import { revalidatePath } from "next/cache";
 
 interface AddTransactionProps {
+    id: string;
     amount: number;
     name: string;
     type: TransactionType
@@ -22,8 +23,12 @@ export const AddTransaction = async (transaction: AddTransactionProps) => {
     if (!userId) {
         throw new Error("User not found");
     }
-    await db.transaction.create({
-        data: { ...transaction, userId },
+    await db.transaction.upsert({
+        where: {
+            id: transaction.id,
+        },
+        create: { ...transaction, userId },
+        update: { ...transaction, userId },
     });
     revalidatePath("/transactions");
 }

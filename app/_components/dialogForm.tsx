@@ -41,39 +41,51 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AddTransaction } from "../_actions/add-transaction";
+import { type TransactionDTO } from "../transactions/dto/transactionDTO";
+import { useEffect } from "react";
 
 interface AddTransactionProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  defaultValues?: TransactionDTO;
+  transactionId?: string;
 }
 
-const DialogForm = ({ isOpen, setIsOpen }: AddTransactionProps) => {
-  const formSchema = z.object({
-    name: z.string().trim().min(1, {
-      message: "Nome é obrigatório",
-    }),
-    amount: z.number().positive({
-      message: "Valor é obrigatório",
-    }),
-    type: z.nativeEnum(TransactionType, {
-      required_error: "Tipo é obrigatório",
-    }),
-    category: z.nativeEnum(TransactionCategory, {
-      required_error: "Categoria é obrigatória",
-    }),
-    paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
-      required_error: "Método de pagamento é obrigatório",
-    }),
-    date: z.date({
-      required_error: "Data é obrigatória",
-    }),
-  });
+const formSchema = z.object({
+  name: z.string().trim().min(1, {
+    message: "Nome é obrigatório",
+  }),
+  amount: z.number().positive({
+    message: "Valor é obrigatório",
+  }),
+  type: z.nativeEnum(TransactionType, {
+    required_error: "Tipo é obrigatório",
+  }),
+  category: z.nativeEnum(TransactionCategory, {
+    required_error: "Categoria é obrigatória",
+  }),
+  paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
+    required_error: "Método de pagamento é obrigatório",
+  }),
+  date: z.date({
+    required_error: "Data é obrigatória",
+  }),
+});
 
+const DialogForm = ({
+  isOpen,
+  setIsOpen,
+  defaultValues,
+  transactionId,
+}: AddTransactionProps) => {
   type zInferForm = z.infer<typeof formSchema>;
 
   const onSubmit = async (data: zInferForm) => {
     try {
-      await AddTransaction(data);
+      await AddTransaction({
+        ...data,
+        id: transactionId || "",
+      });
       setIsOpen(false);
       form.reset();
     } catch (error) {
@@ -93,13 +105,35 @@ const DialogForm = ({ isOpen, setIsOpen }: AddTransactionProps) => {
     },
   });
 
+  useEffect(() => {
+    if (defaultValues && isOpen) {
+      form.reset({
+        ...defaultValues,
+        amount: Number(defaultValues.amount),
+        date: new Date(defaultValues.date),
+      });
+    }
+  }, [defaultValues, isOpen, form]);
+
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
         if (!open) {
-          form.reset();
+          form.reset(
+            defaultValues
+              ? {
+                  name: defaultValues.name || "",
+                  amount: Number(defaultValues.amount),
+                  type: defaultValues.type || TransactionType.EXPENSE,
+                  category: defaultValues.category || TransactionCategory.OTHER,
+                  paymentMethod:
+                    defaultValues.paymentMethod || TransactionPaymentMethod.PIX,
+                  date: new Date(defaultValues.date),
+                }
+              : {},
+          );
         }
       }}
     >
